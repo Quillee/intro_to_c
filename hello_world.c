@@ -7,8 +7,16 @@
     // !> sadf : ALERT/ATTENTION
     // $> asdf : VARAIBLE
     // @RMVME: asdf : META-DIRECTIVE
-    // @TODO: asdf : TODO
+    // @TODO: asdf : TODO    
     // #> moving on... to actually coding
+
+struct Projectile {    
+    unsigned char is_on_fire; // $> the projectile can leave some burning effect
+    int damage; // $> damage projectile does
+    int particles_per_second; // $> number of particles 
+    int too_many_cooks; // $> how many cooks are too many cooks?
+};
+
 int main(int argc, char const *argv[])
 {   
     printf("Hello world!\n");
@@ -29,6 +37,11 @@ int main(int argc, char const *argv[])
     char str[256];
     sprintf(str, "%lld\n", super_large);
     printf("%s\n", str);
+
+    Projectile test_obj;
+    test_obj.is_on_fire = 'Y';
+    test_o
+    
 
     return 0;
 }
