@@ -12,14 +12,16 @@
 void opt_parser(char **args);
 bool menu();
 void continuous_calculate();
+
 int main(int *argc, char **argv){    
-    opt_parser(argv)
+    opt_parser(argv);
     
-    
+    scanf("%s");
+    return 0;
 }
 
 void opt_parser(char **args){
-    if(*args[1] == "-c" || *args[1] == cont){
+    if(args[1] == "-c" || args[1] == "cont"){
         while(menu()){
             continuous_calculate();
         }
