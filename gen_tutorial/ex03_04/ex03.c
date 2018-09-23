@@ -1,11 +1,22 @@
 #include <stdio.h>
 #include <uchar.h>
+#include <stdbool.h>
 
 // #> Exercise 3 : formatted print statements
-// #> Exercise 4: 
+// #> Exercise 4: GDB
+// #> Excercise 5 & 6 : remember operators and keywords
+
+
+typedef struct Projectile {
+    int damage;
+    bool is_on_fire;
+}Projectile;
+
+
 int main(int argc, char *argv[]){
     // #> default
-    int age = 24;
+    volatile int age = 23;
+    age = 24;
     int height = 172;
 
     printf("I am %d years old\n", age);
@@ -58,6 +69,12 @@ int main(int argc, char *argv[]){
     printf("char->\t%c\n int->\t%d\n int?->\t%i\n float->%e\n", unicode_chars[0], unsigned_i, signed_i, f);
     printf("octal->\t%o, \nhex->\t%x\npointer address-> \t%p\nsequence-> %s\n", octal, hex, unicode_chars, unicode_chars);
 
+    printf("\n\n\n\n");
+    goto fail;
+ 
+    printf("success");
 
+    fail:
+        printf("fail");    
     return 0;
 }
