@@ -32,5 +32,11 @@ int main(int argc, char const *argv[])
             cur_age[i]);
     }
 
+
+    printf("-----\n");
+
+    printf("addresses of %p %p %p %p\n", &names[0], &names[1], &names[2], &names[3]);
+
+
     return 0;
 }
