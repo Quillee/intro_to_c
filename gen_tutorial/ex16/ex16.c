@@ -22,7 +22,7 @@ struct Person *person_create(char *name, int age, int height, int weight){
 
 void person_destroy(struct Person *person){
     assert(person != NULL);
-    free(person->name);
+    //free(person->name);
     free(person);
 }
 
@@ -59,7 +59,16 @@ int main(int argc, char *argv[]){
 
     person_print_from_stack(peach);
     person_print_from_stack(luigi);
+    
 
+
+    if(1)
+        printf("\n\n1 is true!\n");
+    else if(0)
+        printf("\n\n0 is true!!\n");
+
+    if(!NULL)
+        printf("\nNOT NULL is true\n");
     // free(luigi.name);
     // free(peach.name);
 

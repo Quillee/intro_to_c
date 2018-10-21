@@ -3,7 +3,8 @@
 #include <stdlib.h>
 #include <errno.h>
 #include <string.h>
-// #> Excercise 17 with extra credit of closing connection in die
+// #> Excercise 17
+// #> Extra Credit -> change the code to accept parameters for MAX_DATA and MAX_ROWS and store them
 
 // #> macros that replace the const definition with the value
 #define MAX_DATA 512
@@ -12,8 +13,8 @@
 struct Address {
     int id;
     int set;
-    char name[MAX_DATA];
-    char email[MAX_DATA];
+    char*  name;
+    char* email;
 };
 
 struct Database {
@@ -174,9 +175,9 @@ void print_settings(){
 }
 
 void print_menu(){
-    printf("============================\n");
+    printf("====================================\n");
     printf("Welcome to the DATABASE! \n");
-    printf("============================\n");
+    printf("====================================\n");
     print_settings();
 }
 
