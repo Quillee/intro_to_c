@@ -129,8 +129,7 @@ void Database_set(struct Connection *conn, int id, const char *name, const char 
     }
 
     addr->set =1;
-    // ! bug, read the "How To Break It" and fix it
-    char *res = strncpy(addr->name, name, MAX_DATA);
+    char *res = strncpy(addr->name, name, MAX_DATA - 1);
     strncat(addr->name, "\0", 1);
     // ! error happens here
     if(!res)
@@ -147,10 +146,29 @@ void Database_get(struct Connection *conn, int id){
     }
 }
 
+void Database_find(struct Connection *conn, const char type, const char *search_criteria ){
+    if (toupper(type) == 'I') Database_get(conn, atoi(search_criteria));
+    struct Address *data = conn->db->rows;
+    for (int index = 0 ; index < sizeof(data) / sizeof(struct Address) ; ++index){
+        if (toupper(type) == 'A'){
+            if(strcmp(data[index]->name, search_criteria)){
+                print_address(data[index]);
+                }
+        }else if (toupper(type) == 'N'){
+            if(strcmp(data[index]->name, search_criteria)){
+                print_address(data[index]);
+            }
+        }else{
+            die("Incorrect search type. \n For find opperation use (A)ddress, (N)ame, (I)d for searching!", conn);
+        }
+
+            
+    }
+}
 
 void Database_delete(struct Connection *conn, int id){    
     // ?> this is all you need, why use what he is using?
-   // conn->db->rows[id].set = 0;
+    // conn->db->rows[id].set = 0;
     struct Address default_addr = { .id = id, .set = 0};
     conn->db->rows[id] = default_addr;
 }
@@ -184,13 +202,12 @@ void print_menu(){
 int main(int argc, char const *argv[])
 {
     print_menu();
-    if(argc < 5)
-        die("Usage: ex17 <max data> <max rows> <dbfile> <action> [action params]", NULL);
+    if(toupper(argv[2][0]) != 'L' && argc < 5)
+        die("Usage: ex17 <dbfile> <action> [action params]", NULL);
     
     const char * filename = argv[3];
     char action = argv[5][0];
-    // @EXTRACREDIT: allowing 
-    struct Connection *conn = Database_open(filename, action, atoi(argv[3]), atoi(argv[4]);
+    struct Connection *conn = Database_open(filename, action);
 
     int id =0;
 
@@ -199,6 +216,10 @@ int main(int argc, char const *argv[])
     if(id >= MAX_ROWS) die("CLI Param too large. There's not enough rows!", conn);
 
     switch(action){
+        case 'f':
+        case 'F':
+            Database_find(conn, argv[5][0], argv[6]);
+            break;
         case 'c':
         case 'C':
             Database_create(conn);

@@ -14,6 +14,8 @@ clean:
 	rm $(ec1_output)
 extra-credit:
 	gcc $(flags) $(ec1_filename) -o$(ec1_output)
+build:
+	gcc $(flags) $(filename) -o $(main_output)
 all:
 	gcc $(flags) $(filename) -o $(main_output)
 	gcc $(flags) $(ec1_filename) -o$(ec1_output)
