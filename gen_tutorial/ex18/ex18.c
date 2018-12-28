@@ -12,11 +12,6 @@
 #include <errno.h>
 #include <string.h>
 
-typedef enum error_codes{
-    no_err,
-    memory
-} error_codes;
-
 void die(const char* message){
     if(errno){
         perror(message);
@@ -27,11 +22,11 @@ void die(const char* message){
 }
 
 // typedef creates a "fake type" int this case for a function pointer
+// compare_callback
 typedef int (*compare_cb)(int a , int b);
 
 // classical bubble sort algo that will use our function pointer for sorting
 int *bubble_sort(int *numbers, int count, compare_cb cmp){
-    error_codes error;
     int temp = 0;
     int i = 0;
     int j = 0;
@@ -43,8 +38,8 @@ int *bubble_sort(int *numbers, int count, compare_cb cmp){
 
     memcpy(target, numbers, count * sizeof(int));
     for (i = 0; i < count; ++i){
-        for(j = 0; j < count ; ++j){
-            if(cmp(target[j], target[j + 1])){
+        for(j = 0; j < count - 1; ++j){
+            if(cmp(target[j], target[j + 1]) > 0){
                 temp = target[j];
                 target[j] = target[j + 1];
                 target[j + 1] = temp;
@@ -63,42 +58,78 @@ int reverse_order(int a, int b){
 }
 
 int strange_order(int a, int b){
-    if(a == 0 || b == 0){
+   if(a == 0 || b == 0){
         return 0;
     }
     return a % b;
 }
-1222q
+
 
 void test_sorting(int *numbers, int count, compare_cb cmp){
     int i = 0;
     int *sorted = bubble_sort(numbers, count, cmp);
-
+    unsigned char *data = (unsigned char *)cmp;
+    for(i = 0; i < 25; i++){
+        printf("%02x:", data[i]);
+    }
     if(!sorted)
         die("Memory Error");
 
-    for(int i = 0; i < count; ++i){
+    for(i = 0; i < count; i++){
         printf("%d ", sorted[i]);
     }
     printf("\n");
     free(sorted);
 }
 
+// dump location of funciton
+void dump(compare_cb cmp){
+    unsigned char *func_data = (unsigned char *)cmp;
 
-int main(int argc, char const *argv[])
+    for(int i = 0; i < 25; i++){
+        printf('%02x:', func_data[i]);
+    }
+}
+
+void overwrite_function(compare_cb writeable_pointer, compare_cb readable_pointer){
+    unsigned char *write = (unsigned char *)writeable_pointer;
+    unsigned char *read = (unsigned char *)readable_pointer;
+
+    for(int i = 0; i < 25; i++){
+        printf('%02x:', write[i]);
+        write[i] = read[i];
+    }
+}
+
+int main(int argc, char *argv[])
 {
     if(argc < 2) die("Error: Usage Ex: ex18 1 2 3 4 5 6");
     int x = 0x1F;
     printf("%x", x);
     int count = argc - 1;
-    int i = 0;
     char** inputs = argv + 1;
 
-    int numbers = malloc(count * sizeof(int));
+    int *numbers = malloc(count * sizeof(int));
     if(!numbers) die("Memory Error");
 
-    for(i = 0; i < count; ++i){
-        
+
+    for(int i = 0; i < count; i++){
+        numbers[i] = atoi(inputs[i]);
     }
+
+    test_sorting(numbers, count, test_sorting);
+    test_sorting(numbers, count, sorted_order);
+    test_sorting(numbers, count, reverse_order);
+    test_sorting(numbers, count, strange_order);
+
+    printf("Done!\n");
+    free(numbers);
+
+    printf("Attempting to break teh code\n\n");
+    dump(sorted_order);
+    printf("^Sorted Order^");
+    overwrite_function(sorted_order, reverse_order);
+    printf("^Now Overwritten to reverse order^");
+
     return 0;
 }
