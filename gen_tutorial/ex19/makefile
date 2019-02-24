@@ -2,6 +2,7 @@
 ec1 	|	make max_rows & data a value that can be changed
 
 flags = -Wall -g
+no_dbg = -DNDEBUG
 # default file and output
 filename = ex19.c
 main_output = ex19
@@ -12,5 +13,10 @@ extra-credit:
 	# extra credit commands
 build:
 	gcc $(flags) $(filename) -o $(main_output)
-all:
+debug:
 	gcc $(flags) $(filename) -o $(main_output)
+all:
+	gcc $(flags) $(no_dbg) $(filename) -o $(main_output)
+
+no_wall:
+	gcc $(filename) -o $(main_output)
