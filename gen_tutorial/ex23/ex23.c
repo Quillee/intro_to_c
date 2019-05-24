@@ -1,6 +1,18 @@
+/****************************************************************************************************\
+ *  Excercise 23 - Duff's device
+ *  By: Melvin
+ * 
+ * Brain teaser for Duff's device. A hack that parallelizes loops by doing multiple things in one iteration
+ * this works POG
+ \***************************************************************************************************/ 
 #include <stdio.h>
 #include <string.h>
+#include <time.h>
 #include "dbg.h"
+
+typedef int (*copy_func)(char *from, char *to, int count);
+
+
 
 int normal_copy(char *from, char *to, int count) {
     int i = 0;
@@ -15,7 +27,6 @@ int normal_copy(char *from, char *to, int count) {
 int duffs_device(char * from, char *to, int count) {
     {
         int n = (count + 7) / 8;
-        log_info("n is: %d", n);
         switch( count % 8) {
             case 0:
                 do {
@@ -81,6 +92,14 @@ int valid_copy(char *data, int count, char expects) {
     return 1;
 }
 
+int time_process(copy_func func, char *from, char *to, int count){
+    time_t start_timer = time(NULL);
+    int rc = func(from, to, 1000);
+
+    log_info("Duffs copy length: %f", difftime(time(NULL), start_timer));
+    return rc;
+}
+
 // 4080 = 2040
 // 122.40 for me -> 170
 // 153 for comp --> 212.5 --> 45900 for 5 years
@@ -97,8 +116,7 @@ int main(int argc, char const *argv[])
     check(valid_copy(to, 1000, 'y'), "Not initialized right.");
 
     // use normal copy to
-    rc = normal_copy(from, to, 1000);
-    log_info("to after normal copy: %s, %d", to, rc);
+    rc = time_process(normal_copy, from, to, 1000);
     check(rc == 1000, "Normal copy failed, %d", rc);
     check(valid_copy(to, 1000, 'x'), "Normal copy failed.");
 
@@ -106,8 +124,7 @@ int main(int argc, char const *argv[])
     memset(to, 'y', 1000);
 
     //duffs version
-    rc = duffs_device(from, to, 1000);
-    //log_info("to after duff's copy: %s, %d", to, rc);
+    rc = time_process(duffs_device, from, to, 1000);
     check(rc == 1000, "Duff's device failed: %d", rc);
     check(valid_copy(to, 1000, 'x'), "Duffs device failed copy.")
 
@@ -115,8 +132,7 @@ int main(int argc, char const *argv[])
     memset(to, 'y', 1000);
 
     // zed's version
-    rc = zeds_device(from, to, 1000);
-    //log_info("to after zed's copy: %s, %d", to, rc);
+    rc = time_process(zeds_device, from, to, 1000);
     check(rc == 1000, "Zed's device failed %d", rc);
     check(valid_copy(to, 1000, 'x'), "Zed's device failed copy.");
 
