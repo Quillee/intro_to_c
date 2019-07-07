@@ -1,7 +1,7 @@
 # Intro to C
 
 ## Purpose
-    Subject to change as I'm not really sure what I want to do with this "project" yet, it'll probably stay 
+    Subject to change as I'm not really sure what I want to do with this "project" yet, it'll probably stay
 - basically just to learn, I guess
     - reteach myself C/C++ programming
         - eventually a game engine would be great
