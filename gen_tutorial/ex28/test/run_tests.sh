@@ -1,6 +1,6 @@
 echo "Running tests:"
 
-for i in tests/*_test
+for i in tests/*_tests
 do
     if test -f $i
     then
